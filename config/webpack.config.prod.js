@@ -117,6 +117,7 @@ module.exports = {
           /\.(js|jsx)$/,
           /\.css$/,
           /\.json$/,
+          /\.less$/,
           /\.svg$/
         ],
         loader: 'url',

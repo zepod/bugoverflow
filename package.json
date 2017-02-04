@@ -50,15 +50,20 @@
   },
   "dependencies": {
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "express": "^4.14.1",
     "less": "^2.7.2",
+    "mongoose": "^4.8.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2"
   },
   "scripts": {
     "start": "NODE_PATH=src/ node scripts/start.js",
-    "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "build": "NODE_PATH=src/ node scripts/build.js",
+    "test": "node scripts/test.js --env=jsdom",
+    "server-dev": "NODE_ENV=development node server",
+    "server-prod": "NODE_ENV=production node server"
   },
+  "proxy": "http://localhost:8080/",
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
@@ -93,6 +98,10 @@
     ]
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "globals": {
+      "__DEV__": true,
+      "__PROD__": true
+    }
   }
 }
