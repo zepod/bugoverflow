@@ -17,3 +17,4 @@ npm-debug.log
 # configs
 server/config/config.dev.js
 server/config/config.prod.js
+server/reports.txt
