@@ -1,5 +1,11 @@
-const routes = require('express').Router();
+const Router = require('express').Router();
+const articlesRoutes = require('./articles');
+const commentsRoutes = require('./comments');
 
-require('./articles');
+Router.get('/health-check', (req, res) => {
+  res.status(200).send('OK')
+})
+Router.use('/articles', articlesRoutes);
+// Router.use('/api/comments', commentsRoutes);
 
-module.exports = routes;
+module.exports = Router;

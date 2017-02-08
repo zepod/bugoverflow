@@ -1,21 +1,16 @@
-const fs = require('fs');
-const path = require('path');
-const messages = require('./messages');
+const writeLog = require('./writeLog');
+const getErrorType = require('../utils').getErrorType;
 
 module.exports = {
-  handle: (err, req, res, next) => {
-    if (!err) return next();
-    const status = +err.message.substr(0, 3);
-    console.error(err);
-    const reportlog = path.join(__dirname + '/../../reports.txt');
-    fs.readFile(reportlog, (er, data) => {
-      if (er) console.error('Error Writing to reports occured =>\n', er)
-      const intlog = `----------------------------------${new Date()}-----------------------------------------
-      \nnew ERROR: ${req.connection.remoteAddress}: ${err.name} {\n   ${err.message} \n} \n ${err.stack}\n\n${data}`
-      fs.writeFile(reportlog, intlog)
-    });
-    const extlog = `Unfortunate happening:\n ${status}: "${err.message}"\n ${err.stack}`
-    res.status(status).send(extlog)
+  handle: (trueError, req, res, next) => {
+    const error = res.locals.handledError;
+    if (!error) return next();
+
+    console.error(`\n${trueError || error}\n`);
+    trueError && writeLog(req, error, trueError)
+
+    delete error.trace;
+    res.status(error.status).send(JSON.stringify(error));
   },
   // /**
   //  * Throw error
@@ -26,9 +21,15 @@ module.exports = {
   //  * @api private
   //  */
   //
-  throw: (next, status, info) => {
-    const randomMessageIndex = Math.floor(Math.random() * 3);
-    const message = messages['' + status][randomMessageIndex];
-    next(new Error(`${status}, ${message}, ${info && info}`))
+  throw: ({next, error: {status, message}, res, trueError}) => {
+    const trace = new Error().stack;
+    const type = getErrorType(status)
+    res.locals.handledError = {
+      status,
+      type,
+      message,
+      trace
+    };
+    next(trueError);
   }
 }

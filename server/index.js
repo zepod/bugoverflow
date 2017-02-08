@@ -1,26 +1,13 @@
-const path = require('path');
-const express = require('express');
-
 const initApp = require('./app');
 const initDB = require('./database');
-const routes = require('./app/routes');
-
-const errors = require('./app/errors');
-
-// global dependencies
-require('./app/models');
+const path = require('path');
+const composeMiddlewares = require('./app/middlewares')
 
 // initialize
-const app = initApp();
 const db = initDB();
+const newApp = initApp();
 
-// serve API
-app.use('/api/', routes);
-app.use('/static', express.static(path.join(__dirname, '../build/static')));
-app.use('/api/*', (req, res, next) => {
-  errors.throw(next, 404);
-});
-app.use(errors.handle)
+const app = composeMiddlewares(newApp);
 
 if (__PROD__) {
   // serve the app
