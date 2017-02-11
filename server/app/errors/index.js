@@ -1,35 +1,25 @@
-const writeLog = require('./writeLog');
-const getErrorType = require('../utils').getErrorType;
+// const writeLog = require('errors/writeLog');
+const getErrorType = require('utils').getErrorType;
 
 module.exports = {
   handle: (trueError, req, res, next) => {
     const error = res.locals.handledError;
-    if (!error) return next();
-
-    console.error(`\n${trueError || error}\n`);
-    trueError && writeLog(req, error, trueError)
-
+    // writeLog(req, error, trueError)
+    if (!error) return next(trueError);
+    // send back cool json error without stack trace
     delete error.trace;
-    res.status(error.status).send(JSON.stringify(error));
+    res.status(error.status).json(error);
   },
-  // /**
-  //  * Throw error
-  //  *
-  //  * @param {function} Next
-  //  * @param {number} Status
-  //  * @param {string} info
-  //  * @api private
-  //  */
-  //
-  throw: ({next, error: {status, message}, res, trueError}) => {
-    const trace = new Error().stack;
-    const type = getErrorType(status)
+
+  throw: ({error: {status = 500, message = "That's awkard..."} = {}, next, res, err}) => {
+    if (err) console.error(err);
+    const trace = err ? err.stack : new Error().stack;
     res.locals.handledError = {
       status,
-      type,
+      type: getErrorType(status),
       message,
       trace
     };
-    next(trueError);
+    next(err || res.locals.handledError);
   }
 }

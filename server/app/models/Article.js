@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Comment = require('models/Comment');
 
 // Schema
 const ArticleSchema = new Schema({
@@ -10,7 +11,7 @@ const ArticleSchema = new Schema({
   blocks: {type: [String], defualt: []},
   images: {type: [String], defualt: []},
   created: { type : Date, default : Date.now }
-});
+}, {strict: true});
 
 // Validation
 ArticleSchema.path('title').required(true, 'Article title cannot be blank');
@@ -35,6 +36,17 @@ ArticleSchema.statics = {
       .limit(limit)
       .skip(limit * page)
       .exec();
+  },
+
+  update: function (articleId, commentId) {
+    return new Promise((resolve, reject) => {
+      const updateQuery = {
+        '$push': {
+          'comments': commentId
+        }
+      }
+      this.findByIdAndUpdate(articleId, updateQuery, {safe: true, upsert: true, new: true}, resolve)
+    })
   }
 };
 

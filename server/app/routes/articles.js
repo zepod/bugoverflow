@@ -1,9 +1,7 @@
 const router = require('express').Router();
 const querystring = require('querystring');
-const errors = require('../errors');
-const ArticleModel = require('../models/Article');
-const ArticleController = require('../controllers/Article');
-
+const errors = require('errors');
+const ArticleModel = require('models/Article');
 
 router.route('/')
   .get((req, res, next) => {
@@ -11,20 +9,14 @@ router.route('/')
     ArticleModel
       .loadCollection(options)
       .then(articles => {
-        if (articles) {
-          return res
+        return res
           .status(200)
           .json(articles);
-        } else {
-          errors.throw({error: {
-            status: 404, message: `No articles to get`
-          }, res, next});
-        }
       })
-      .catch(e => {
+      .catch(err => {
         errors.throw({error: {
-          status: 500, message: `Schema Error: Article.loadCollection failed`
-        }, res, next, trueError: e});
+          status: 404, message: `ArticleCollection fetch failed`
+        }, res, next, err});
       });
   })
 router.route('/:articleId')
@@ -32,36 +24,28 @@ router.route('/:articleId')
     ArticleModel
       .load(req.params.articleId)
       .then(article => {
-        if (article) {
-          return res
+        return res
           .status(200)
           .json(article);
-        } else {
-          errors.throw({error: {
-            status: 404, message: `No such article to update`
-          }, res, next});
-        }
       })
       .catch(e => {
-        console.log('one of eme')
         errors.throw({error: {
-          status: 404, message: `No such article to update`
+          status: 404, message: `No such article to get`
         }, res, next, e});
       })
   })
   .post((req, res, next) => {
-    ArticleController
+    ArticleModel
       .update(req.params.articleId, req.body)
       .then(article => {
-        if (article) {
           return res
             .status(200)
             .json(article)
-        } else {
-          errors.throw({error: {
-            status: 404, message: `No such article to update`
-          }, res, next});
-        }
+      })
+      .catch(e => {
+        errors.throw({error: {
+          status: 404, message: `No such article to update`
+        }, res, next, e});
       })
   })
 

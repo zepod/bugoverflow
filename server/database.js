@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const config = require('./config');
+const config = require('config');
 
 const initDB = (cb) => {
 
@@ -23,11 +23,13 @@ const initDB = (cb) => {
 
   const db = mongoose.connection;
 
-  db.on('error',  console.error.bind(console, 'connection error:'));
+  db.on('error',  console.error.bind(console, 'Database connection error:'));
   db.once('open', () => {
     console.log('===> Database connection established');
     if (cb) cb();
   })
+  if(__DEV__) mongoose.set('debug', true)
+
   return db;
 }
 module.exports = initDB;
