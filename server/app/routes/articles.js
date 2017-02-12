@@ -1,23 +1,23 @@
-const router = require('express').Router();
-const querystring = require('querystring');
-const errors = require('errors');
-const ArticleModel = require('models/Article');
+const router = require('express').Router()
+const querystring = require('querystring')
+const errors = require('errors')
+const ArticleModel = require('models/Article')
 
 router.route('/')
   .get((req, res, next) => {
-    const options = querystring.parse(req.path);
+    const options = querystring.parse(req.path)
     ArticleModel
-      .loadCollection(options)
+      .loadCollection(['porn'])
       .then(articles => {
         return res
           .status(200)
-          .json(articles);
+          .json(articles)
       })
       .catch(err => {
         errors.throw({error: {
           status: 404, message: `ArticleCollection fetch failed`
-        }, res, next, err});
-      });
+        }, res, next, err})
+      })
   })
 router.route('/:articleId')
   .get((req, res, next) => {
@@ -26,12 +26,12 @@ router.route('/:articleId')
       .then(article => {
         return res
           .status(200)
-          .json(article);
+          .json(article)
       })
       .catch(e => {
         errors.throw({error: {
           status: 404, message: `No such article to get`
-        }, res, next, e});
+        }, res, next, e})
       })
   })
   .post((req, res, next) => {
@@ -45,8 +45,8 @@ router.route('/:articleId')
       .catch(e => {
         errors.throw({error: {
           status: 404, message: `No such article to update`
-        }, res, next, e});
+        }, res, next, e})
       })
   })
 
-module.exports = router;
+module.exports = router

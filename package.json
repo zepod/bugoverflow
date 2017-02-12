@@ -26,6 +26,8 @@
     "extract-text-webpack-plugin": "1.0.1",
     "file-loader": "0.9.0",
     "filesize": "3.3.0",
+    "flow": "^0.2.3",
+    "flow-bin": "^0.39.0",
     "fs-extra": "0.30.0",
     "gzip-size": "3.0.0",
     "html-webpack-plugin": "2.24.0",
@@ -54,18 +56,20 @@
     "express": "^4.14.1",
     "jsonschema": "^1.1.1",
     "less": "^2.7.2",
+    "mobx-remotedev": "^0.2.5",
     "mongoose": "^4.8.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2"
   },
   "scripts": {
-    "start": "NODE_PATH=src/:src/features/ node scripts/start.js",
+    "start": "NODE_PATH=src/:src/features/ flow && NODE_PATH=src/:src/features/ node scripts/start.js",
     "build": "NODE_PATH=src/:src/features/ node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "server-dev": "NODE_PATH=server/:server/app/ NODE_ENV=development node server",
-    "server-prod": "NODE_ENV=production node server"
+    "server-prod": "NODE_ENV=production node server",
+    "flow": "flow"
   },
-  "proxy": "http://localhost:8080/",
+  "proxy": "http://bugoverflow.local:8080/",
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
@@ -77,7 +81,7 @@
       "<rootDir>[/\\\\](build|docs|node_modules)[/\\\\]"
     ],
     "testEnvironment": "node",
-    "testURL": "http://localhost",
+    "testURL": "http://bugoverflow.local",
     "transform": {
       "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",

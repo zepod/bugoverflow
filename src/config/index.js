@@ -1,6 +1,6 @@
-global.__DEV__ = process.env.NODE_ENV === 'development'
-global.__PROD__ = process.env.NODE_ENV === 'production'
-
+window.__DEV__ = process.env.NODE_ENV === 'development'
+window.__PROD__ = process.env.NODE_ENV === 'production'
+console.log('nev', process.env.NODE_ENV)
 let configSettings = {}
 if (__DEV__) {
     configSettings = require('./config.dev')
@@ -10,4 +10,4 @@ if (__DEV__) {
   throw new Error('Configuration Error: No environment defined')
 }
 
-module.exports = configSettings
+export default configSettings

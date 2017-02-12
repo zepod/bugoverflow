@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const config = require('config');
+const mongoose = require('mongoose')
+const config = require('config')
 
 const initDB = (cb) => {
 
@@ -17,19 +17,19 @@ const initDB = (cb) => {
         connectTimeoutMS : 30000
       }
     }
-  };
+  }
 
-  mongoose.connect(`mongodb://${config.db.user}:${config.db.pwd}@ds135089.mlab.com:35089/${config.db.name}`, options);
+  mongoose.connect(`mongodb://${config.db.user}:${config.db.pwd}@ds135089.mlab.com:35089/${config.db.name}`, options)
 
-  const db = mongoose.connection;
+  const db = mongoose.connection
 
-  db.on('error',  console.error.bind(console, 'Database connection error:'));
+  db.on('error',  console.error.bind(console, 'Database connection error:'))
   db.once('open', () => {
-    console.log('===> Database connection established');
-    if (cb) cb();
+    console.log('===> Database connection established')
+    if (cb) cb()
   })
   if(__DEV__) mongoose.set('debug', true)
 
-  return db;
+  return db
 }
-module.exports = initDB;
+module.exports = initDB

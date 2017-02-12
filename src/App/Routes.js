@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 
 // Components
-import ArticleList from 'features/ArticleList';
-import Layout from 'features/Layout';
-import ArticleDetail from 'features/ArticleDetail';
-import NotFound from 'features/NotFound';
+import ArticleList from 'features/ArticleList'
+import Layout from 'features/Layout'
+import ArticleDetail from 'features/ArticleDetail'
+import NotFound from 'features/NotFound'
 
 const Routes = () => {
   return (
@@ -16,7 +16,7 @@ const Routes = () => {
       </Route>
       <Route path="*" component={NotFound}/>
     </Router>
-  );
+  )
 }
 
-export default Routes;
+export default Routes

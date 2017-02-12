@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const Comment = require('models/Comment');
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+const Comment = require('models/Comment')
 
 // Schema
 const ArticleSchema = new Schema({
@@ -11,31 +11,31 @@ const ArticleSchema = new Schema({
   blocks: {type: [String], defualt: []},
   images: {type: [String], defualt: []},
   created: { type : Date, default : Date.now }
-}, {strict: true});
+}, {strict: true})
 
 // Validation
-ArticleSchema.path('title').required(true, 'Article title cannot be blank');
-ArticleSchema.path('body').required(true, 'Article body cannot be blank');
+ArticleSchema.path('title').required(true, 'Article title cannot be blank')
+ArticleSchema.path('body').required(true, 'Article body cannot be blank')
 
 // Statics
 ArticleSchema.statics = {
   load: function (_id) {
     return this.findOne({ _id })
       .populate('comments')
-      .exec();
+      .exec()
   },
 
   loadCollection: function (options = {}) {
-    const criteria = options.criteria || {};
-    const page = options.page || 0;
-    const limit = options.limit || 30;
+    const criteria = options.criteria || {}
+    const page = options.page || 0
+    const limit = options.limit || 30
     const sort = options.sorting || { createdAt: -1 }
     return this.find(criteria)
       .populate('comments')
       .sort(sort)
       .limit(limit)
       .skip(limit * page)
-      .exec();
+      .exec()
   },
 
   update: function (articleId, commentId) {
@@ -48,6 +48,6 @@ ArticleSchema.statics = {
       this.findByIdAndUpdate(articleId, updateQuery, {safe: true, upsert: true, new: true}, resolve)
     })
   }
-};
+}
 
-module.exports = mongoose.model('Article', ArticleSchema);
+module.exports = mongoose.model('Article', ArticleSchema)
