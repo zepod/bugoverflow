@@ -8,4 +8,5 @@ node_modules/mobx/lib/mobx.js.flow
 [options]
 emoji=true
 module.system.node.resolve_dirname=src
+module.system.node.resolve_dirname=src/node_modules
 module.system.node.resolve_dirname=src/features

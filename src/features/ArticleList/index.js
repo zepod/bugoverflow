@@ -1,17 +1,18 @@
-import React from 'react'
-import Component from 'components/Component'
+import React from 'react';
+import Component from 'components/Component';
 
 export default class ArticleList extends Component {
   componentDidMount() {
-    console.log('didmount')
-    this.store.article.loadArticles()
+    this.store.article.loadArticles({
+      fields: ['title']
+    });
+    setTimeout(() => this.store.article.loadArticle('58990bc8734d1d4347585460'), 10000)
   }
   render() {
-    console.log('is it',this.store)
     return (
       <div>
         ArticleList
       </div>
-    )
+    );
   }
 }

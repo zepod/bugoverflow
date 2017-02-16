@@ -26,13 +26,15 @@ ArticleSchema.statics = {
   },
 
   loadCollection: function (options = {}) {
-    const criteria = options.criteria || {}
+    const filter = options.filter || {'_id': {'$not': {'$eq': null}}}
     const page = options.page || 0
     const limit = options.limit || 30
+    const fields = options.fields
+    console.log('fi', fields)
     const sort = options.sorting || { createdAt: -1 }
-    return this.find(criteria)
-      .populate('comments')
+    return this.find(filter)
       .sort(sort)
+      .select(fields)
       .limit(limit)
       .skip(limit * page)
       .exec()

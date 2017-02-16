@@ -1,6 +1,7 @@
 // @flow
 import config from 'config'
 import Store from 'Store'
+import {constructFields} from 'utils/helpers'
 
 export default function createInterface(domain :string) :Object {
   const cacheTracker :Array<string> = []
@@ -25,51 +26,53 @@ export default function createInterface(domain :string) :Object {
   }
 
   return {
-    create: (body :Object, cb? :Function = () => {}, errorMessage? :string) :Object => {
+    create: (body :Object, options? :Object, cb? :Function = () => {}) :Object => {
       const request = {
+        ...options,
         method: 'POST',
-        body,
-        errorMessage
+        body
       }
       const send = prepareSend(domain, request, cb)
       return { send }
     },
-    update: (id :string, body :Object, cb? :Function = () => {}, errorMessage? :string) :Object => {
+    update: (id :string, body :Object, options? :Object, cb? :Function = () => {}) :Object => {
       const request = {
-        params: id,
+        ...options,
+        subdomain: id,
         method: 'PUT',
-        body,
-        errorMessage
+        body
       }
       const send = prepareSend(domain, request, cb)
       return { send }
     },
-    get: (id :string, cb? :Function = () => {}, errorMessage? :string, shouldCache? :boolean = true) :Object => {
+    get: (id :string, options? :Object, cb? :Function = () => {}, shouldCache? :boolean = true) :Object => {
       const request = {
-        params: id,
+        ...options,
+        subdomain: id,
         method: 'GET',
-        errorMessage
+        fields: options && options.fields && constructFields(options.fields)
       }
       const casheTrack = getCacheTrack(request, domain)
       if (shouldCache && isCached(casheTrack)) return {}
       const send = prepareSend(domain, request, getCachingCallback(cb, request, casheTrack))
       return { send }
     },
-    getCollection: (options :Object = {}, cb? :Function = () => {}, errorMessage? :string, shouldCache? :boolean = true) :Object => {
+    getCollection: (options :Object = {}, cb? :Function = () => {}, shouldCache? :boolean = true) :Object => {
       const request = {
+        ...options,
         method: 'GET',
-        errorMessage
+        fields: options.fields && constructFields(options.fields)
       }
       const casheTrack = getCacheTrack(request, domain)
       if (shouldCache && isCached(casheTrack)) return {}
       const send = prepareSend(domain, request, getCachingCallback(cb, request, casheTrack))
       return { send }
     },
-    remove: (id :string, cb? :Function = () => {}, errorMessage? :string) :Object => {
+    remove: (id :string, options? :Object, cb? :Function = () => {}) :Object => {
       const request = {
-        params: id,
-        method: 'DELETE',
-        errorMessage
+        ...options,
+        subdomain: id,
+        method: 'DELETE'
       }
       const send = prepareSend(domain, request, cb)
       return { send }
@@ -78,20 +81,26 @@ export default function createInterface(domain :string) :Object {
 }
 
 function prepareSend(domain :string, request :Object, callback :Function) :Function {
-  const url = `${config.protocol}://${config.domain}${config.port}/api/${domain}/${request.params || ''}`
+  const subdomain = request.subdomain ? `/${request.subdomain}`: '';
+  const fields = request.fields ? `?${request.fields}`: '';
+  const url = `${config.protocol}://${config.domain}${config.port}/api/${domain}${subdomain}${fields}`
   const options = {
     method: request.method,
     body: request.body,
     headers: request.headers
   }
-  return () => {
-    fetch(url, options)
-      .then(res => res.json())
-      .then(data => {
-        callback(data)
-      })
-      .catch(err => {
-        Store.ui.throwError(request.errorMessage || 'Request failed. Naturally...')
-      })
+  return () :Promise<void> => {
+    return new Promise((resolve, reject) => {
+      fetch(url, options)
+        .then(res => res.json())
+        .then(data => {
+          callback(data);
+          resolve()
+        })
+        .catch(err => {
+          reject(err)
+          Store.ui.throwError(request.errorMessage || 'Request failed. Naturally...')
+        })
+    })
   }
 }

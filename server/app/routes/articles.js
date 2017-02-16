@@ -5,9 +5,8 @@ const ArticleModel = require('models/Article')
 
 router.route('/')
   .get((req, res, next) => {
-    const options = querystring.parse(req.path)
     ArticleModel
-      .loadCollection(['porn'])
+      .loadCollection(req.query)
       .then(articles => {
         return res
           .status(200)
