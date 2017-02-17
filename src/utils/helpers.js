@@ -1,3 +1,4 @@
+// @flow
 export function constructFields(fields :Array<string>) :string {
   return `&fields=${fields.join('%20')}`
 }

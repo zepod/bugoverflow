@@ -94,8 +94,11 @@ function prepareSend(domain :string, request :Object, callback :Function) :Funct
       fetch(url, options)
         .then(res => res.json())
         .then(data => {
-          callback(data);
-          resolve()
+          setTimeout(() => {
+            callback(data);
+            resolve()
+
+          }, 5000)
         })
         .catch(err => {
           reject(err)

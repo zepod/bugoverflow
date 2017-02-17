@@ -1,6 +1,10 @@
 
 export default class StorePrototype {
 
+  constructor(collectionName: string) {
+    this.collection = collectionName;
+  }
+
   pushToCollection(target :string, value : Object, markAsLoaded: boolean) {
     pushMore([value], this[target], markAsLoaded)
   }
@@ -14,6 +18,24 @@ export default class StorePrototype {
       return {then: (f :Function) => f()}
     }
   }
+
+  createAction (type :string, action :Function) :Function {
+    const self = this;
+    switch (type) {
+      case 'load':
+      return (...args) => {
+        const cachedHandler = self.catchCache(args[0], self.collection);
+        if (cachedHandler) return cachedHandler();
+        return action(...args)
+      }
+      case 'loadMore':
+        return (...args) => action(...args)
+      default:
+        throw new Error('Action Creator doesn\'t recognized provided type ', type)
+    }
+  }
+
+
 }
 
 function pushMore(entities : Array<Object>, target: Object, markAsLoaded: boolean) {

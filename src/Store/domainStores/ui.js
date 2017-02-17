@@ -1,7 +1,7 @@
-// @flow
+import remotedev from 'mobx-remotedev'
 import {observable} from 'mobx'
 
-export default class UI {
+class UI {
   @observable errorMessage :string
   @observable errorShouldShow :boolean
   @observable preloading :boolean
@@ -24,4 +24,14 @@ export default class UI {
   handleError() {
     this.errorShouldShow = false
   }
+
+  startPreloading() {
+    this.preloading = true
+  }
+
+  stopPreloading() {
+    this.preloading = false
+  }
 }
+
+export default remotedev(UI)

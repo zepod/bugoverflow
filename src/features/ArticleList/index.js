@@ -1,13 +1,11 @@
 import React from 'react';
 import Component from 'components/Component';
+import {preload} from 'utils/uitools';
 
-export default class ArticleList extends Component {
-  componentDidMount() {
-    this.store.article.loadArticles({
-      fields: ['title']
-    });
-    setTimeout(() => this.store.article.loadArticle('58990bc8734d1d4347585460'), 10000)
-  }
+@preload((store: Object): Promise<*> => {
+  return store.article.loadArticles({fields: ['title']});
+})
+class ArticleList extends Component {
   render() {
     return (
       <div>
@@ -16,3 +14,5 @@ export default class ArticleList extends Component {
     );
   }
 }
+
+export default ArticleList
