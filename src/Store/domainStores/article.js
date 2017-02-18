@@ -1,5 +1,6 @@
-
+// @flow
 import {observable, action} from 'mobx'
+
 import remotedev from 'mobx-remotedev';
 
 import createInterface from 'utils/interface'

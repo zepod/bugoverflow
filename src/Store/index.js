@@ -1,3 +1,4 @@
+// @flow
 import ArticleStore from './domainStores/article'
 import UIStore from './domainStores/ui'
 import CommentStore from './domainStores/comment';

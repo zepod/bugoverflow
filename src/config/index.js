@@ -1,6 +1,7 @@
+// @flow
 window.__DEV__ = process.env.NODE_ENV === 'development'
 window.__PROD__ = process.env.NODE_ENV === 'production'
-console.log('nev', process.env.NODE_ENV)
+
 let configSettings = {}
 if (__DEV__) {
     configSettings = require('./config.dev')

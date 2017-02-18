@@ -1,4 +1,4 @@
-
+// @flow
 import {observable, computed, action} from 'mobx'
 import remotedev from 'mobx-remotedev';
 import {article} from '../index';

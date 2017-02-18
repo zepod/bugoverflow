@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import Component from 'components/Component';
 import {preload} from 'utils/uitools';

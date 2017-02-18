@@ -1,4 +1,4 @@
-
+// @flow
 import React from 'react'
 import Component from 'components/Component';
 import Store from 'Store';
@@ -8,7 +8,7 @@ import {observer} from 'mobx-react'
 export function preload(loadingFunc :Function) {
   Store.ui.startPreloading()
   loadingFunc(Store).then(() => Store.ui.stopPreloading());
-  return (DecoratedComponent :Class<Component>) => {
+  return (DecoratedComponent :Class<*>) => {
     @observer
     class PreloadHOC extends Component {
       render() {

@@ -1,30 +1,31 @@
-
+// @flow
 export default class StorePrototype {
+  collection: string = ''
 
   constructor(collectionName: string) {
     this.collection = collectionName;
   }
 
   pushToCollection(target :string, value : Object, markAsLoaded: boolean) {
-    pushMore([value], this[target], markAsLoaded)
+    pushMore([value], (this: Object)[target], markAsLoaded)
   }
 
   pushMoreToCollection(target: string, value :Array<Object>, markAsLoaded: boolean) {
-    pushMore(value, this[target], markAsLoaded)
+    pushMore(value, (this: Object)[target], markAsLoaded)
   }
 
   catchCache(id :string, collection:string) {
-    if (this[collection] && this[collection][id] && this[collection][id].fullyLoaded) {
+    if ((this: Object)[collection] && (this: Object)[collection][id] && (this: Object)[collection][id].fullyLoaded) {
       return {then: (f :Function) => f()}
     }
   }
 
   createAction (type :string, action :Function) :Function {
-    const self = this;
+
     switch (type) {
       case 'load':
       return (...args) => {
-        const cachedHandler = self.catchCache(args[0], self.collection);
+        const cachedHandler = (this: Object).catchCache(args[0], this.collection);
         if (cachedHandler) return cachedHandler();
         return action(...args)
       }

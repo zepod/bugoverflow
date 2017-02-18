@@ -8,6 +8,7 @@
     "babel-eslint": "7.1.1",
     "babel-jest": "17.0.2",
     "babel-loader": "6.2.7",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-preset-react-app": "^2.0.1",
     "case-sensitive-paths-webpack-plugin": "1.1.4",
     "chalk": "^1.1.3",
@@ -55,6 +56,7 @@
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "body-parser": "^1.16.0",
     "express": "^4.14.1",
+    "flow-typed": "^2.0.0",
     "jsonschema": "^1.1.1",
     "less": "^2.7.2",
     "mobx-remotedev": "^0.2.5",
@@ -63,8 +65,8 @@
     "react-dom": "^15.4.2"
   },
   "scripts": {
-    "start": "NODE_PATH=src/:src/features/ flow && NODE_PATH=src/:src/features/ node scripts/start.js",
-    "build": "NODE_PATH=src/:src/features/ node scripts/build.js",
+    "start": "NODE_PATH=src/:src/features/:modules flow && NODE_PATH=src/:src/features/:modules node scripts/start.js",
+    "build": "NODE_PATH=src/:src/features/:modules node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "server-dev": "NODE_PATH=server/:server/app/ NODE_ENV=development node server",
     "server-prod": "NODE_ENV=production node server",
@@ -101,7 +103,8 @@
     ],
     "plugins": [
       "transform-decorators-legacy",
-      "transform-class-properties"
+      "transform-class-properties",
+      "transform-flow-strip-types"
     ]
   },
   "eslintConfig": {

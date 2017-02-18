@@ -1,5 +1,7 @@
-import React from 'react'
-import Component from 'components/Component'
+// @flow
+
+import React from 'react';
+import Component from 'components/Component';
 
 export default class Preloader extends Component {
   render() {
@@ -7,6 +9,6 @@ export default class Preloader extends Component {
       <div>
         Preloader
       </div>
-    )
+    );
   }
 }

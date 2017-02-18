@@ -1,3 +1,4 @@
+// @flow
 import remotedev from 'mobx-remotedev'
 import {observable} from 'mobx'
 
