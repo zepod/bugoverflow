@@ -42,6 +42,6 @@ export default class StorePrototype {
 function pushMore(entities : Array<Object>, target: Object, markAsLoaded: boolean) {
   const [entity, ...rest] = entities;
   const newentity = {...entity, fullyLoaded: markAsLoaded}
-  target.set(entity._id, newentity)
+  target.set(newentity._id, newentity)
   if (rest.length) pushMore(rest, target, markAsLoaded)
 }

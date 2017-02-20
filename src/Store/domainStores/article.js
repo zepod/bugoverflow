@@ -1,5 +1,5 @@
 // @flow
-import {observable, action} from 'mobx'
+import {observable, action, computed} from 'mobx'
 
 import remotedev from 'mobx-remotedev';
 
@@ -12,8 +12,12 @@ class Article extends StorePrototype {
   @observable articles: Map<string, Object> = new Map();
 
   // @computed getAllArticles = () :Array<Object> => {}
-  // @computed getArticles = (ids :Array<string>) :Array<Object> => {}
-  // @computed getArticle = (id :string) :Object => {}
+  // @computed getArticles = (ids? :Array<string>) :Array<Object> => {
+  //   if (!ids) return this.articles;
+  //
+  //   return this.articles.filter(article => ids.indexOf(article._id) > -1);
+  // }
+
   @action loadArticles :Function = this.createAction('loadMore',
     (options :Object) :Promise<void> => {
       const defaultOptions = {
@@ -23,7 +27,7 @@ class Article extends StorePrototype {
 
       return Interface.getCollection(defaultOptions, (articles :Array<Object>) => {
         this.pushMoreToCollection('articles', articles, !options.fields)
-      }).send()
+      }).send();
   });
 
   @action loadArticle :Function = this.createAction('load',
@@ -34,6 +38,7 @@ class Article extends StorePrototype {
       }
 
       return Interface.get(articleId, defaultOptions, (article) => {
+
         this.pushToCollection('articles', article, true)
       }).send()
   })

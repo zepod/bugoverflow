@@ -53,7 +53,7 @@ export default function createInterface(domain :string) :Object {
         fields: options && options.fields && constructFields(options.fields)
       }
       const casheTrack = getCacheTrack(request, domain)
-      if (shouldCache && isCached(casheTrack)) return {}
+      if (shouldCache && isCached(casheTrack)) return { send: () => {}}
       const send = prepareSend(domain, request, getCachingCallback(cb, request, casheTrack))
       return { send }
     },
@@ -64,7 +64,7 @@ export default function createInterface(domain :string) :Object {
         fields: options.fields && constructFields(options.fields)
       }
       const casheTrack = getCacheTrack(request, domain)
-      if (shouldCache && isCached(casheTrack)) return {}
+      if (shouldCache && isCached(casheTrack)) return { send: () => {}}
       const send = prepareSend(domain, request, getCachingCallback(cb, request, casheTrack))
       return { send }
     },
@@ -94,11 +94,8 @@ function prepareSend(domain :string, request :Object, callback :Function) :Funct
       fetch(url, options)
         .then(res => res.json())
         .then(data => {
-          setTimeout(() => {
-            callback(data);
-            resolve()
-
-          }, 5000)
+          callback(data);
+          resolve()
         })
         .catch(err => {
           reject(err)

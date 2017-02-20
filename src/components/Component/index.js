@@ -7,7 +7,7 @@ import Store from 'Store';
 
 type State = *;
 
-export default class Component<T> extends React.Component {
+export default class Component extends React.Component {
   store = {};
   constructor(props: Object, context: Object) {
     super(props, context);

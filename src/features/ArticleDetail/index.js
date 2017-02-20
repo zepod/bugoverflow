@@ -1,11 +1,20 @@
 // @flow
-import React from 'react';
+import React, {PropTypes} from 'react';
 import Component from 'components/Component';
+import {preload, connect} from 'utils/uitools';
 
+@preload((store: Object, params: Object): Promise<*> => {
+  return store.article.loadArticle(params.id)
+})
+@connect((store: Object, params :Object): Object => {
+  const article = store.article.articles.get(params.id)
+  return {
+    article
+  }
+})
 export default class ArticleDetail extends Component {
-  componentDidMount() {
-    const store: Object = this.store;
-    store.article.loadArticle(this.props.params.id);
+  static propTypes = {
+    article: PropTypes.object.isRequired
   }
   render() {
     return (
