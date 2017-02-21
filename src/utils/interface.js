@@ -29,6 +29,7 @@ export default function createInterface(domain :string) :Object {
     create: (body :Object, options? :Object, cb? :Function = () => {}) :Object => {
       const request = {
         ...options,
+        subdomain: options && options.id,
         method: 'POST',
         body
       }

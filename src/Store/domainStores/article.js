@@ -1,5 +1,4 @@
-// @flow
-import {observable, action, computed} from 'mobx'
+import {observable, action} from 'mobx'
 
 import remotedev from 'mobx-remotedev';
 
@@ -41,7 +40,16 @@ class Article extends StorePrototype {
 
         this.pushToCollection('articles', article, true)
       }).send()
-  })
+  });
+
+  @action updateArticle: Function = (id :string, property :string, value :Object) :void => {
+    const article : Object = this.articles.get(id);
+    if (Array.isArray(article[property])) {
+      article[property].push(value);
+    } else {
+      article[property] = value;
+    }
+  }
 }
 
 export default remotedev(Article)

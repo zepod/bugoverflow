@@ -17,6 +17,7 @@ export default class ArticleDetail extends Component {
     article: PropTypes.object.isRequired
   }
   render() {
+    console.log('article', this.props.article)
     return (
       <div>
         ArticleDetail

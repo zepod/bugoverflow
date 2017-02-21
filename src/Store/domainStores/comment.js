@@ -1,5 +1,5 @@
 // @flow
-import {observable, computed, action} from 'mobx'
+import {action, observable} from 'mobx'
 import remotedev from 'mobx-remotedev';
 import {article} from '../index';
 import createInterface from 'utils/interface'
@@ -7,21 +7,17 @@ import createInterface from 'utils/interface'
 
 const Interface = createInterface('comments')
 class Comment {
-  @observable comments: Array<Object> = []
+  @observable comments = []
 
-  // @computed getAllComments = () :Array<Object> => {}
-  // @computed getComments = (ids :Array<string>) :Array<Object> => {}
-  // @computed getComment = (id :string) :Object => {}
-
-  @action loadComments = (options :Object) :Promise<void> => {
+  @action addComments = (comment: Object, options :Object) :Promise<void> => {
     const wrappedOptions = {
-      errorMessage: 'Well that\'s depressing, Articles failed to fetch.',
+      errorMessage: 'Comment sending was sabotaged. Fkin Klingons...',
       ...options
     }
-    const self = this;
+    const articleId = options.id;
     return new Promise((resolve, reject) => {
-      Interface.getCollection(wrappedOptions, (comments :Array<Object>) => {
-        self.comments = comments;
+      Interface.create(comment, wrappedOptions, (response) => {
+        article.updateArticle(articleId, 'comments', response.comment)
       }).send(resolve, reject)
     })
   }
