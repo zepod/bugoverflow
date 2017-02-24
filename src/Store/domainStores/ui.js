@@ -26,11 +26,11 @@ class UI {
     this.errorShouldShow = false
   }
 
-  startPreloading() {
+  startPreloading = () => {
     this.preloading = true
   }
 
-  stopPreloading() {
+  stopPreloading = () => {
     this.preloading = false
   }
 }

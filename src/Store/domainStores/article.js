@@ -1,4 +1,4 @@
-import {observable, action} from 'mobx'
+import {observable, action, computed} from 'mobx'
 
 import remotedev from 'mobx-remotedev';
 
@@ -15,6 +15,10 @@ class Article extends StorePrototype {
   //   if (!ids) return this.articles;
   //
   //   return this.articles.filter(article => ids.indexOf(article._id) > -1);
+  // }
+
+  // @computed get articles() {
+  //
   // }
 
   @action loadArticles :Function = this.createAction('loadMore',
