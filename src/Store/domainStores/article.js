@@ -10,16 +10,9 @@ const Interface = createInterface('articles')
 class Article extends StorePrototype {
   @observable articles: Map<string, Object> = new Map();
 
-  // @computed getAllArticles = () :Array<Object> => {}
-  // @computed getArticles = (ids? :Array<string>) :Array<Object> => {
-  //   if (!ids) return this.articles;
-  //
-  //   return this.articles.filter(article => ids.indexOf(article._id) > -1);
-  // }
-
-  // @computed get articles() {
-  //
-  // }
+  @computed get allArticles() :Array<Object> {
+    return this.articles.values();
+  }
 
   @action loadArticles :Function = this.createAction('loadMore',
     (options :Object) :Promise<void> => {

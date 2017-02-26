@@ -10,7 +10,7 @@ modules/declarations.js
 emoji=true
 module.system.node.resolve_dirname=src
 module.system.node.resolve_dirname=modules
-module.system.node.resolve_dirname=src/features
+module.system.node.resolve_dirname=src/components
 module.system.node.resolve_dirname=src/node_modules
 esproposal.decorators=ignore
 module.name_mapper.extension='less' -> '<PROJECT_ROOT>/modules/less'

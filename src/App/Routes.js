@@ -5,7 +5,7 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import ArticleList from 'features/ArticleList'
 import Layout from 'features/Layout'
 import ArticleDetail from 'features/ArticleDetail'
-import NotFound from 'components/NotFound'
+import NotFound from 'NotFound'
 
 const Routes = () => {
   return (

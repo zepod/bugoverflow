@@ -1,7 +1,8 @@
-// @flow
+
 import config from 'config'
 import Store from 'Store'
 import {constructFields} from 'utils/helpers'
+import Promise from 'bluebird'
 
 export default function createInterface(domain :string) :Object {
   const cacheTracker :Array<string> = []
