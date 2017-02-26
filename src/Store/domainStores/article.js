@@ -14,7 +14,7 @@ class Article extends StorePrototype {
     return this.articles.values();
   }
 
-  @action loadArticles :Function = this.createAction('loadMore',
+  @action loadArticles :Function<Promise> = this.createAction('loadMore',
     (options :Object) :Promise<void> => {
       const defaultOptions = {
         errorMessage: 'Well that\'s depressing, Articles failed to fetch.',
@@ -26,7 +26,7 @@ class Article extends StorePrototype {
       }).send();
   });
 
-  @action loadArticle :Function = this.createAction('load',
+  @action loadArticle :Function<Promise> = this.createAction('load',
     (articleId :string, options :Object) :Promise<void> => {
       const defaultOptions = {
         errorMessage: 'This article is obviously too awesome to load itself',
@@ -34,7 +34,6 @@ class Article extends StorePrototype {
       }
 
       return Interface.get(articleId, defaultOptions, (article) => {
-
         this.pushToCollection('articles', article, true)
       }).send()
   });

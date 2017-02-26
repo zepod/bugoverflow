@@ -1,4 +1,4 @@
-
+//@ flow
 import config from 'config'
 import Store from 'Store'
 import {constructFields} from 'utils/helpers'
@@ -55,8 +55,8 @@ export default function createInterface(domain :string) :Object {
         fields: options && options.fields && constructFields(options.fields)
       }
       const casheTrack = getCacheTrack(request, domain)
-      if (shouldCache && isCached(casheTrack)) return { send: () => {}}
-      const send = prepareSend(domain, request, getCachingCallback(cb, request, casheTrack))
+      if (shouldCache && isCached(casheTrack)) return { send: () => new Promise(r => r())};
+      const send : Function<Promise> = prepareSend(domain, request, getCachingCallback(cb, request, casheTrack))
       return { send }
     },
     getCollection: (options :Object = {}, cb? :Function = () => {}, shouldCache? :boolean = true) :Object => {
@@ -66,8 +66,8 @@ export default function createInterface(domain :string) :Object {
         fields: options.fields && constructFields(options.fields)
       }
       const casheTrack = getCacheTrack(request, domain)
-      if (shouldCache && isCached(casheTrack)) return { send: () => {}}
-      const send = prepareSend(domain, request, getCachingCallback(cb, request, casheTrack))
+      if (shouldCache && isCached(casheTrack)) return { send: () => new Promise(r => r())};
+      const send : Function<Promise> = prepareSend(domain, request, getCachingCallback(cb, request, casheTrack))
       return { send }
     },
     remove: (id :string, options? :Object, cb? :Function = () => {}) :Object => {
@@ -82,7 +82,7 @@ export default function createInterface(domain :string) :Object {
   }
 }
 
-function prepareSend(domain :string, request :Object, callback :Function) :Function {
+function prepareSend(domain :string, request :Object, callback :Function) :Function<Promise> {
   const subdomain = request.subdomain ? `/${request.subdomain}`: '';
   const fields = request.fields ? `?${request.fields}`: '';
   const url = `${config.protocol}://${config.domain}${config.port}/api/${domain}${subdomain}${fields}`
