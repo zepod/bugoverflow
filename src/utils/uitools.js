@@ -1,25 +1,42 @@
 import React, {Component} from 'react';
-// import Component from 'components/Component';
 import Store from 'Store';
 import Preloader from 'components/Preloader';
 import { observer } from 'mobx-react';
 
-
+type preloadState = {
+  isPreloading: boolean
+}
 
 export function preload(loadingFunc :Function) :Function {
-  // Store.ui.startPreloading()
   return (DecoratedComponent :Class<*>) => {
-    // @observer
     class PreloadHOC extends Component {
       constructor(props :Object) {
         super(props);
-        this.state = {
-          boo: true
+        const state : preloadState = {
+          isPreloading: true
         }
-        loadingFunc(Store, this.props.params).then(() => this.setState({boo: false}));
+        this.state = state;
+        loadingFunc(Store, this.props.params).then(() => this.setState({isPreloading: false}));
       }
+
+      componentWillReceiveProps(nextProps) {
+        const nextParams :Array<string> = Object.keys(nextProps.params)
+                  .map((key: string) :string => nextProps.params[key])
+        const params :Array<string> = Object.keys(this.props.params)
+                  .map((key: string) :string => this.props.params[key])
+        const paramsChanged : boolean = nextParams.reduce((changed, param) => {
+          return nextParams.length !== params.length || changed || params.indexOf(param) === -1;
+        }, false);
+
+        if (paramsChanged) {
+          this.setState({isPreloading: true});
+          loadingFunc(Store, nextProps.params).then(() => this.setState({isPreloading: false}));
+        }
+      }
+
       render() {
-        if (this.state.boo) {
+        const state: preloadState = this.state;
+        if (state.isPreloading) {
           return (<Preloader />)
         } else {
           return (<DecoratedComponent {...this.props}/>)

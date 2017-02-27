@@ -1,26 +1,38 @@
 import React, {PropTypes} from 'react';
-import Component from 'components/Component';
-import ArticleInfo from 'components/ArticleInfo';
-import ArticleBody from 'components/ArticleBody';
-// import CommentSection from 'components/CommentSection';
-// import {Link} from 'react-router';
+import Component from 'Component';
+import CommentForm from 'CommentForm';
+import Comment from 'Comment';
 
-export default class ArticleDetail extends Component {
+export default class CommentSection extends Component {
   static propTypes = {
-    article: PropTypes.object.isRequired
+    comments: PropTypes.array.isRequired,
+    addComment: PropTypes.func.isRequired
   }
 
   render() {
     const {
-      article
+      comments
     } = this.props;
-
     return (
-        <div>
-          <ArticleInfo />
-          <ArticleBody />
-          {/* <CommentSection /> */}
-        </div>
+      <div>
+        <h2>Comments</h2>
+        <CommentForm
+          onSubmit={this.props.addComment}
+        />
+        <ul>
+          {comments.map((comment,i) => {
+            return (
+              <li key={`${comment._id}${i}`}>
+                <Comment
+                  author={comment.author}
+                  body={comment.body}
+                  created={comment.created}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     );
   }
 }

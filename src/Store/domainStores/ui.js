@@ -5,14 +5,12 @@ import {observable} from 'mobx'
 class UI {
   @observable errorMessage :string
   @observable errorShouldShow :boolean
-  @observable preloading :boolean
 
   // ** Default values **
 
   constructor() {
     this.errorMessage = ''
     this.errorShouldShow = false
-    this.preloading = false
   }
 
   // ** Methods **
@@ -26,13 +24,6 @@ class UI {
     this.errorShouldShow = false
   }
 
-  startPreloading = () => {
-    this.preloading = true
-  }
-
-  stopPreloading = () => {
-    this.preloading = false
-  }
 }
 
 export default remotedev(UI)

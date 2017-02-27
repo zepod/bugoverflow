@@ -4,22 +4,22 @@ import remotedev from 'mobx-remotedev';
 import {article} from '../index';
 import createInterface from 'utils/interface'
 
+type CommentType = {author: string, body: string};
 
 const Interface = createInterface('comments')
 class Comment {
   @observable comments = []
 
-  @action addComments = (comment: Object, options :Object) :Promise<void> => {
+  @action addComment = (comment: CommentType, options :Object) :Promise<void> => {
+    console.log('in action', comment)
     const wrappedOptions = {
       errorMessage: 'Comment sending was sabotaged. Fkin Klingons...',
       ...options
     }
-    const articleId = options.id;
-    return new Promise((resolve, reject) => {
-      Interface.create(comment, wrappedOptions, (response) => {
-        article.updateArticle(articleId, 'comments', response.comment)
-      }).send(resolve, reject)
-    })
+    const articleId :string = options.id;
+    return Interface.create(comment, wrappedOptions, (response) => {
+      article.updateArticle(articleId, 'comments', response.comment)
+    }).send()
   }
 }
 

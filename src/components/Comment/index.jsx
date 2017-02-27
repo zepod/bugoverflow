@@ -1,25 +1,26 @@
 import React, {PropTypes} from 'react';
-import Component from 'components/Component';
-import ArticleInfo from 'components/ArticleInfo';
-import ArticleBody from 'components/ArticleBody';
-import CommentSection from 'components/CommentSection';
-// import {Link} from 'react-router';
+import Component from 'Component';
+import DateMark from 'DateMark';
 
-export default class ArticleDetail extends Component {
+export default class Comment extends Component {
   static propTypes = {
-    article: PropTypes.object.isRequired
+    author: PropTypes.string.isRequired,
+    body: PropTypes.string.isRequired,
+    created: PropTypes.string.isRequired
   }
 
   render() {
     const {
-      article
+      author,
+      body,
+      created
     } = this.props;
 
     return (
         <div>
-          <ArticleInfo />
-          <ArticleBody />
-          <CommentSection />
+          <h3>{author}</h3>
+          <p>{body}</p>
+          <DateMark date={new Date(created)} />
         </div>
     );
   }

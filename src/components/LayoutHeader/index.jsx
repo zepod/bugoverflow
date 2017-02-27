@@ -9,16 +9,16 @@ const Header = (props: Object) => {
         <h1>Bug Overflow</h1>
       </Link>
       <ul>
-        <Link to="category/ideas">
+        <Link to="/category/ideas">
           <li>Ideas</li>
         </Link>
-        <Link to="category/reviews">
+        <Link to="/category/reviews">
           <li>Reviews</li>
         </Link>
-        <Link to="category/guides">
+        <Link to="/category/guides">
           <li>Guides</li>
         </Link>
-        <Link to="category/stories">
+        <Link to="/category/stories">
           <li>Stories</li>
         </Link>
       </ul>

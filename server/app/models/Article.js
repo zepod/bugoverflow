@@ -20,12 +20,14 @@ ArticleSchema.path('body').required(true, 'Article body cannot be blank');
 // Statics
 ArticleSchema.statics = {
   load: function(_id) {
-    return this.findOne({ _id }).populate('comments').exec();
+    return this.findOne({ _id }).populate({
+      path: 'comments',
+      options: { sort: { created: -1 }}
+    }).exec();
   },
 
   loadCollection: function(options = {}) {
     const filter = options.filter ? qs.parse(options.filter) : { _id: { $not: { $eq: null } } };
-    console.log(filter)
     const page = options.page || 0;
     const limit = options.limit || 30;
     const fields = options.fields;

@@ -47,6 +47,7 @@ export default function createInterface(domain :string) :Interface {
         method: 'POST',
         body
       }
+      console.log('interface', body)
       const send : () => Promise<void> = prepareSend(domain, request, cb)
       return { send }
     },
@@ -101,9 +102,13 @@ function prepareSend(domain :string, request :Object, callback :Function) : () =
   const url :string = `${config.protocol}://${config.domain}${config.port}/api/${domain}${subdomain}?${fields}${filter}`;
   const options = {
     method: request.method,
-    body: request.body,
-    headers: request.headers
+    body: JSON.stringify(request.body),
+    headers: {
+      "Content-Type": "application/json",
+      ...request.headers
+    }
   }
+  console.log('final', options)
   return () :Promise<void> => {
     return new Promise((resolve, reject) => {
       fetch(url, options)

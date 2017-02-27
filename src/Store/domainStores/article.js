@@ -40,11 +40,13 @@ class Article extends StorePrototype {
 
   @action updateArticle: Function = (id :string, property :string, value :Object) :void => {
     const article : Object = this.articles.get(id);
+    const updatedArticle = {...article};
     if (Array.isArray(article[property])) {
-      article[property].push(value);
+      updatedArticle[property] = [value, ...updatedArticle[property]]
     } else {
-      article[property] = value;
+      updatedArticle[property] = value;
     }
+    this.articles.set(id, updatedArticle);
   }
 }
 

@@ -4,17 +4,26 @@ import Component from 'Component';
 import ArticleInfo from 'components/ArticleInfo';
 import ArticleBody from 'components/ArticleBody';
 import {preload, connect} from 'utils/uitools';
+import CommentSection from 'CommentSection';
+
+type Comment = {author: string, body: string};
 
 @preload((store: Object, params: Object): Promise<*> => {
   return store.article.loadArticle(params.id)
 })
 @connect((store: Object, params :Object): Object => {
   const article = store.article.articles.get(params.id)
+  console.log('connectin');
   return { article }
 })
 class ArticleDetail extends Component {
   static propTypes = {
     article: PropTypes.object.isRequired
+  }
+
+  handleAddComment = (articleId :string, comment: Comment) => {
+    const store : Object = this.store;
+    store.comment.addComment(comment, {id: articleId})
   }
 
   render() {
@@ -34,7 +43,10 @@ class ArticleDetail extends Component {
         <ArticleBody
           body={article.body}
         />
-        {/* <CommentSection /> */}
+        <CommentSection
+          comments={article.comments}
+          addComment={this.handleAddComment}
+        />
       </div>
     );
   }

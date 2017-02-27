@@ -1,3 +1,4 @@
+// @flow
 import React, {PropTypes} from 'react';
 import Component from 'components/Component';
 import ArticleList from 'components/ArticleList';

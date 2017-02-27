@@ -15,8 +15,8 @@ const Routes = () => {
         <IndexRoute component={MainArticleList} />
         <Route path="article/:id" component={ArticleDetail} />
         <Route path="category/:category" component={CategoryList} />
+        <Route path="*" component={NotFound}/>
       </Route>
-      <Route path="*" component={NotFound}/>
     </Router>
   )
 }
