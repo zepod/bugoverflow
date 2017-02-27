@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const qs = require('qs');
 const Comment = require('models/Comment');
 
 // Schema
@@ -23,7 +24,8 @@ ArticleSchema.statics = {
   },
 
   loadCollection: function(options = {}) {
-    const filter = options.filter || { _id: { $not: { $eq: null } } };
+    const filter = options.filter ? qs.parse(options.filter) : { _id: { $not: { $eq: null } } };
+    console.log(filter)
     const page = options.page || 0;
     const limit = options.limit || 30;
     const fields = options.fields;

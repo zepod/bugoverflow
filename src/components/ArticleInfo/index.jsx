@@ -5,7 +5,6 @@ import Categories from 'ArticleCategories';
 import Overview from 'ArticleOverview';
 import Title from 'ArticleTitle';
 import DateMark from 'DateMark';
-import {Link} from 'react-router';
 
 export default class ArticleInfo extends Component {
   static propTypes = {
@@ -24,17 +23,13 @@ export default class ArticleInfo extends Component {
       created
     } = this.props;
 
-    return (
-      <Link
-        to={`article/${this.props.id}`}
-      >
-        <div>
-          <Title title={title} />
-          <DateMark date={new Date(created)} />
-          <Overview overview={overview} />
-          <Categories categories={categories} />
-        </div>
-      </Link>
+    return (  
+      <div>
+        <Title title={title} />
+        <DateMark date={new Date(created)} />
+        <Overview overview={overview} />
+        <Categories categories={categories} />
+      </div>
     );
   }
 }

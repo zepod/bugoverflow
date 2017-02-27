@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import Component from 'components/Component';
-import ArticleInfo from 'components/ArticleInfo';
+import ArticleList from 'components/ArticleList';
 import {preload, connect} from 'utils/uitools';
 
 @preload((store: Object): Promise<*> => {
@@ -10,27 +10,17 @@ import {preload, connect} from 'utils/uitools';
   const articles = store.article.allArticles
   return { articles };
 })
-class ArticleList extends Component {
+class MainArticleList extends Component {
   static propTypes = {
     articles: PropTypes.array.isRequired
   }
 
   render() {
+    const {articles} = this.props;
     return (
-      <div>
-        {this.props.articles.map((article, i) => (
-          <ArticleInfo
-            key={`${article._id}-article-${i}`}
-            title={article.title}
-            overview={article.overview}
-            id={article._id}
-            created={article.created}
-            categories={article.categories}
-          />
-        ))}
-      </div>
+      <ArticleList articles={articles}/>
     );
   }
 }
 
-export default ArticleList;
+export default MainArticleList;

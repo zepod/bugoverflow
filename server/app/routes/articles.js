@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const querystring = require('querystring')
+// const querystring = require('querystring')
 const errors = require('errors')
 const ArticleModel = require('models/Article')
 
@@ -8,9 +8,15 @@ router.route('/')
     ArticleModel
       .loadCollection(req.query)
       .then(articles => {
-        return res
-          .status(200)
-          .json(articles)
+        if (articles.length) {
+          return res
+            .status(200)
+            .json(articles)
+        } else {
+          errors.throw({error: {
+            status: 404, message: `No such Articles found`
+          }, res, next})
+        }
       })
       .catch(err => {
         errors.throw({error: {

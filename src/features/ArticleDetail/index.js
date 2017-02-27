@@ -1,9 +1,9 @@
 // @flow
 import React, {PropTypes} from 'react';
 import Component from 'Component';
-import Detail from 'ArticleDetail';
+import ArticleInfo from 'components/ArticleInfo';
+import ArticleBody from 'components/ArticleBody';
 import {preload, connect} from 'utils/uitools';
-import {Link} from 'react-router'
 
 @preload((store: Object, params: Object): Promise<*> => {
   return store.article.loadArticle(params.id)
@@ -16,10 +16,7 @@ class ArticleDetail extends Component {
   static propTypes = {
     article: PropTypes.object.isRequired
   }
-  // componentWillMount() {
-  //   const store:Object = this.store;
-  //   store.ui.startPreloading()
-  // }
+
   render() {
     console.log('article', this.props.article)
     const {
@@ -27,12 +24,17 @@ class ArticleDetail extends Component {
     } = this.props
     return (
       <div>
-        {/* <Detail
-          article={article}
-        /> */}
-        <Link to="/">
-        hej dejv
-      </Link>
+        <ArticleInfo
+          title={article.title}
+          overview={article.overview}
+          categories={article.categories}
+          created={article.created}
+          id={article._id}
+        />
+        <ArticleBody
+          body={article.body}
+        />
+        {/* <CommentSection /> */}
       </div>
     );
   }
