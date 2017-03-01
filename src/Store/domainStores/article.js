@@ -1,4 +1,4 @@
-import {observable, action, computed} from 'mobx'
+import {observable, action} from 'mobx'
 
 import remotedev from 'mobx-remotedev';
 
@@ -9,10 +9,6 @@ const Interface = createInterface('articles')
 
 class Article extends StorePrototype {
   @observable articles: Map<string, Object> = new Map();
-
-  @computed get allArticles() :Array<Object> {
-    return this.articles.values();
-  }
 
   @action loadArticles :Function<Promise> = this.createAction('loadMore',
     (options :Object) :Promise<void> => {

@@ -11,15 +11,13 @@ class Comment {
   @observable comments = []
 
   @action addComment = (comment: CommentType, options :Object) :Promise<void> => {
-    console.log('in action', comment)
     const wrappedOptions = {
       errorMessage: 'Comment sending was sabotaged. Fkin Klingons...',
       ...options
     }
     const articleId :string = options.id;
-    return Interface.create(comment, wrappedOptions, (response) => {
-      article.updateArticle(articleId, 'comments', response.comment)
-    }).send()
+    article.updateArticle(articleId, 'comments', {created: Date(), ...comment})
+    return Interface.create(comment, wrappedOptions).send()
   }
 }
 

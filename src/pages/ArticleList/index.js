@@ -7,7 +7,7 @@ import {preload, connect} from 'utils/uitools';
   return store.article.loadArticles({fields: ['title', 'categories', 'overview', 'created']});
 })
 @connect((store: Object, params :Object): Object => {
-  const articles = store.article.allArticles
+  const articles = store.article.getCollection()
   return { articles };
 })
 class MainArticleList extends Component {

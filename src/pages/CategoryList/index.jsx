@@ -3,6 +3,7 @@ import React, {PropTypes} from 'react';
 import Component from 'components/Component';
 import ArticleList from 'components/ArticleList';
 import {preload, connect} from 'utils/uitools';
+import {categoryMatch} from 'utils/patterns';
 
 @preload((store: Object, params :Object): Promise<*> => {
   return store.article.loadArticles({
@@ -11,7 +12,9 @@ import {preload, connect} from 'utils/uitools';
   });
 })
 @connect((store: Object, params :Object): Object => {
-  const articles :Array<Object> = store.article.allArticles
+  const getterPattern = categoryMatch(params.category);
+  const articles :Array<Object> = store.article.getCollection(getterPattern);
+
   return { articles };
 })
 class CategoryList extends Component {

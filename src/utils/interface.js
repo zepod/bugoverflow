@@ -3,7 +3,6 @@ import config from 'config'
 import Store from 'Store'
 import {constructFields, constructFilter} from 'utils/helpers'
 import Promise from 'bluebird'
-import {browserHistory} from 'react-router'
 
 type InterfaceAPI = { send: () => Promise<*>}
 
@@ -47,7 +46,6 @@ export default function createInterface(domain :string) :Interface {
         method: 'POST',
         body
       }
-      console.log('interface', body)
       const send : () => Promise<void> = prepareSend(domain, request, cb)
       return { send }
     },
@@ -108,18 +106,16 @@ function prepareSend(domain :string, request :Object, callback :Function) : () =
       ...request.headers
     }
   }
-  console.log('final', options)
   return () :Promise<void> => {
     return new Promise((resolve, reject) => {
       fetch(url, options)
         .then(res => res.json())
         .then(data => {
-            callback(data);
-            resolve()
+          callback(data);
+          resolve()
         })
         .catch(err => {
-          browserHistory.push('/notfound')
-          reject(err)
+          reject(err);
           Store.ui.throwError(request.errorMessage || 'Request failed. Naturally...')
         })
     })

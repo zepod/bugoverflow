@@ -7,17 +7,7 @@ router.route('/')
   .get((req, res, next) => {
     ArticleModel
       .loadCollection(req.query)
-      .then(articles => {
-        if (articles.length) {
-          return res
-            .status(200)
-            .json(articles)
-        } else {
-          errors.throw({error: {
-            status: 404, message: `No such Articles found`
-          }, res, next})
-        }
-      })
+      .then(articles => res.status(200).json(articles))
       .catch(err => {
         errors.throw({error: {
           status: 404, message: `ArticleCollection fetch failed`

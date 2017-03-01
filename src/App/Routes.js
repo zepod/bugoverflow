@@ -2,10 +2,10 @@ import React from 'react'
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 
 // Components
-import MainArticleList from 'features/ArticleList'
-import CategoryList from 'features/CategoryList'
-import Layout from 'features/Layout'
-import ArticleDetail from 'features/ArticleDetail'
+import MainArticleList from 'pages/ArticleList'
+import CategoryList from 'pages/CategoryList'
+import Layout from 'pages/Layout'
+import ArticleDetail from 'pages/ArticleDetail'
 import NotFound from 'NotFound'
 
 const Routes = () => {

@@ -13,7 +13,6 @@ type Comment = {author: string, body: string};
 })
 @connect((store: Object, params :Object): Object => {
   const article = store.article.articles.get(params.id)
-  console.log('connectin');
   return { article }
 })
 class ArticleDetail extends Component {
@@ -27,7 +26,6 @@ class ArticleDetail extends Component {
   }
 
   render() {
-    console.log('article', this.props.article)
     const {
       article
     } = this.props
