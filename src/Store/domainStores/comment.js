@@ -3,20 +3,21 @@ import {action, observable} from 'mobx'
 import remotedev from 'mobx-remotedev';
 import {article} from '../index';
 import createInterface from 'utils/interface'
-
-type CommentType = {author: string, body: string};
+import type {CommentT} from 'Store/types';
 
 const Interface = createInterface('comments')
 class Comment {
   @observable comments = []
 
-  @action addComment = (comment: CommentType, options :Object) :Promise<void> => {
+  @action addComment = (comment: CommentT, options :Object) :Promise<void> => {
     const wrappedOptions = {
       errorMessage: 'Comment sending was sabotaged. Fkin Klingons...',
       ...options
     }
+
     const articleId :string = options.id;
-    article.updateArticle(articleId, 'comments', {created: Date(), ...comment})
+    article.update(articleId, 'comments', {created: Date(), ...comment});
+
     return Interface.create(comment, wrappedOptions).send()
   }
 }

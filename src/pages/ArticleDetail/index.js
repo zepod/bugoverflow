@@ -5,14 +5,13 @@ import ArticleInfo from 'components/ArticleInfo';
 import ArticleBody from 'components/ArticleBody';
 import {preload, connect} from 'utils/uitools';
 import CommentSection from 'CommentSection';
-
-type Comment = {author: string, body: string};
+import type {CommentT, ArticleT} from 'Store/types';
 
 @preload((store: Object, params: Object): Promise<*> => {
   return store.article.loadArticle(params.id)
 })
 @connect((store: Object, params :Object): Object => {
-  const article = store.article.articles.get(params.id)
+  const article : ArticleT = store.article.articles.get(params.id);
   return { article }
 })
 class ArticleDetail extends Component {
@@ -20,7 +19,7 @@ class ArticleDetail extends Component {
     article: PropTypes.object.isRequired
   }
 
-  handleAddComment = (articleId :string, comment: Comment) => {
+  handleAddComment = (articleId :string, comment: CommentT) => {
     const store : Object = this.store;
     store.comment.addComment(comment, {id: articleId})
   }

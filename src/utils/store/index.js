@@ -1,8 +1,5 @@
 // @flow
-
-type FilterPattern = (a: Object, i? :number) => boolean;
-type SelectorPattern = Array<string>;
-type Pattern = FilterPattern | SelectorPattern;
+import type {PatternT} from 'Store/types';
 
 type FakePromise = {
   then: Function
@@ -33,7 +30,7 @@ export default class StorePrototype {
     } else return false;
   }
 
-  getCollection(pattern? : Pattern) :Array<Object> {
+  getCollection(pattern? : PatternT) :Array<Object> {
     const collectionName :string = this.collection;
     const self: Object = this;
     if (!pattern) return self[collectionName].values();
@@ -47,7 +44,6 @@ export default class StorePrototype {
   }
 
   createAction (type :string, action :Function) :Function {
-
     switch (type) {
       case 'load':
       return (...args) => {
@@ -62,7 +58,19 @@ export default class StorePrototype {
     }
   }
 
-
+  update(id : string, property: string, value: any) :Object {
+    const self : Object = this;
+    const entity : Object = self[self.collection].get(id);
+    const updatedEntity = {...entity};
+    if (Array.isArray(updatedEntity[property])) {
+      updatedEntity[property] = [value, ...updatedEntity[property]]
+    } else {
+      updatedEntity[property] = value;
+    }
+    return self[self.collection]
+              .set(id, updatedEntity)
+              .get(id);
+  }
 }
 
 function pushMore(entities : Array<Object>, target: Object, markAsLoaded: boolean) {

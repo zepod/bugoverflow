@@ -4,6 +4,7 @@ import Component from 'components/Component';
 import ArticleList from 'components/ArticleList';
 import {preload, connect} from 'utils/uitools';
 import {categoryMatch} from 'utils/patterns';
+import type {ArticleT, PatternT} from 'Store/types';
 
 @preload((store: Object, params :Object): Promise<*> => {
   return store.article.loadArticles({
@@ -12,8 +13,8 @@ import {categoryMatch} from 'utils/patterns';
   });
 })
 @connect((store: Object, params :Object): Object => {
-  const getterPattern = categoryMatch(params.category);
-  const articles :Array<Object> = store.article.getCollection(getterPattern);
+  const getterPattern : PatternT = categoryMatch(params.category);
+  const articles : ArticleT = store.article.getCollection(getterPattern);
 
   return { articles };
 })
