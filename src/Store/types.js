@@ -1,12 +1,14 @@
 // @flow
+export type ID = string;
+
 export type CommentT = {
-  _id: string,
+  _id: ID,
   author: string,
   body: string,
 }
 
 export type ArticleT = {
-  _id: string,
+  _id: ID,
   overview: string,
   images: Array<string>,
   categories: Array<string>,
@@ -18,6 +20,6 @@ export type ArticleT = {
 }
 
 type FilterPatternT = (a: Object, i? :number) => boolean;
-type SelectorPatternT = Array<string>;
+type SelectorPatternT = Array<ID>;
 
 export type PatternT = FilterPatternT | SelectorPatternT;

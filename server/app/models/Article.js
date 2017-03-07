@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const qs = require('qs');
+const {constructQuery} = require('utils')
 const Comment = require('models/Comment');
 
 // Schema
@@ -27,12 +27,18 @@ ArticleSchema.statics = {
   },
 
   loadCollection: function(options = {}) {
-    const filter = options.filter ? qs.parse(options.filter) : { _id: { $not: { $eq: null } } };
+    const query = constructQuery(options);
     const page = options.page || 0;
     const limit = options.limit || 30;
     const fields = options.fields;
     const sort = options.sorting || { createdAt: -1 };
-    return this.find(filter).sort(sort).select(fields).limit(limit).skip(limit * page).exec();
+    return this
+        .find(query)
+        .sort(sort)
+        .select(fields)
+        .limit(limit)
+        .skip(limit * page)
+        .exec();
   },
 
   update: function(articleId, commentId) {

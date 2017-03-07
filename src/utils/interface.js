@@ -1,10 +1,16 @@
-// @flow
+
 import config from 'config'
 import Store from 'Store'
-import {constructFields, constructFilter} from 'utils/helpers'
+import {
+  constructFields,
+  constructFilter,
+  constructSearch,
+  fakeResolve,
+} from 'utils/helpers';
+import type {ID} from 'Store/types';
 import Promise from 'bluebird'
 
-type InterfaceAPI = { send: () => Promise<*>}
+export type InterfaceAPI = { send: () => Promise<*>}
 
 type InterfaceMethod = (...parameters: any) => InterfaceAPI
 
@@ -49,7 +55,7 @@ export default function createInterface(domain :string) :Interface {
       const send : () => Promise<void> = prepareSend(domain, request, cb)
       return { send }
     },
-    update: (id :string, body :Object, options? :Object, cb? :Function = () => {}) :InterfaceAPI => {
+    update: (id :ID, body :Object, options? :Object, cb? :Function = () => {}) :InterfaceAPI => {
       const request = {
         method: 'PUT',
         body
@@ -57,7 +63,7 @@ export default function createInterface(domain :string) :Interface {
       const send : () => Promise<void> = prepareSend(domain, request, cb)
       return { send }
     },
-    get: (id :string, options? :Object = {}, cb? :Function = () => {}, shouldCache? :boolean = true) :InterfaceAPI => {
+    get: (id :ID, options? :Object = {}, cb? :Function = () => {}, shouldCache :boolean) :InterfaceAPI => {
       const request = {
         ...options,
         subdomain: id,
@@ -65,23 +71,24 @@ export default function createInterface(domain :string) :Interface {
         fields: options.fields && constructFields(options.fields)
       }
       const casheTrack : string = getCacheTrack(request, domain);
-      if (shouldCache && isCached(casheTrack)) return { send: () => new Promise(r => r())};
+      if (shouldCache && isCached(casheTrack)) return fakeResolve(cb);
       const send : () => Promise<void> = prepareSend(domain, request, getCachingCallback(cb, request, casheTrack))
       return { send }
     },
-    getCollection: (options :Object = {}, cb? :Function = () => {}, shouldCache? :boolean = true) :InterfaceAPI => {
+    getCollection: (options :Object = {}, cb? :Function = () => {}, shouldCache :boolean) :InterfaceAPI => {
       const request = {
         ...options,
-        method: 'GET',
         fields: options.fields && constructFields(options.fields),
-        filter: options.filters && constructFilter(options.filters)
+        filter: options.filters && constructFilter(options.filters),
+        search: options.search && constructSearch(options.search.searchPhrase, options.search.field),
+        method: 'GET',
       }
       const casheTrack : string = getCacheTrack(request, domain)
-      if (shouldCache && isCached(casheTrack)) return { send: () => new Promise(r => r())};
+      if (shouldCache && isCached(casheTrack)) return fakeResolve(cb);
       const send : () => Promise<void> = prepareSend(domain, request, getCachingCallback(cb, request, casheTrack))
       return { send }
     },
-    remove: (id :string, options? :Object, cb? :Function = () => {}) :InterfaceAPI => {
+    remove: (id :ID, options? :Object, cb? :Function = () => {}) :InterfaceAPI => {
       const request = {
         ...options,
         subdomain: id,
@@ -97,7 +104,9 @@ function prepareSend(domain :string, request :Object, callback :Function) : () =
   const subdomain :string = request.subdomain ? `/${request.subdomain}`: '';
   const fields :string = request.fields || '';
   const filter :string = request.filter || '';
-  const url :string = `${config.protocol}://${config.domain}${config.port}/api/${domain}${subdomain}?${fields}${filter}`;
+  const search :string = request.search || '';
+  const url :string =  `${config.protocol}://${config.domain}${config.port}/api/${domain}${subdomain}?${fields}${filter}${search}`;
+
   const options = {
     method: request.method,
     body: JSON.stringify(request.body),

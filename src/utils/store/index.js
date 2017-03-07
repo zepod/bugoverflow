@@ -1,5 +1,5 @@
 // @flow
-import type {PatternT} from 'Store/types';
+import type {PatternT, ID} from 'Store/types';
 
 type FakePromise = {
   then: Function
@@ -16,11 +16,11 @@ export default class StorePrototype {
     pushMore([value], (this: Object)[target], markAsLoaded)
   }
 
-  pushMoreToCollection(target: string, value :Array<Object>, markAsLoaded: boolean) {
+  pushMoreToCollection(target: ID, value :Array<Object>, markAsLoaded?: boolean = false) {
     pushMore(value, (this: Object)[target], markAsLoaded)
   }
 
-  catchCache(id :string, collection:string) :FakePromise {
+  catchCache(id :ID, collection:string) :FakePromise {
     if (
       (this: Object)[collection] &&
       (this: Object)[collection][id] &&
@@ -58,7 +58,7 @@ export default class StorePrototype {
     }
   }
 
-  update(id : string, property: string, value: any) :Object {
+  update(id : ID, property: string, value: any) :Object {
     const self : Object = this;
     const entity : Object = self[self.collection].get(id);
     const updatedEntity = {...entity};

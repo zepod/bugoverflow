@@ -51,9 +51,12 @@ export function connect(getData: Function) {
   return (DecoratedComponent: Class<*>) => {
     @observer
     class ConnectHOC extends Component {
-      render() {
-        return <DecoratedComponent {...this.props} {...getData(Store, this.props.params)} />;
-      }
+      render = () => (
+        <DecoratedComponent
+          {...this.props}
+          {...getData(Store, this.props.params)}
+        />
+      );
     }
     return ConnectHOC;
   };

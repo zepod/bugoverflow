@@ -3,7 +3,7 @@ import {action, observable} from 'mobx'
 import remotedev from 'mobx-remotedev';
 import {article} from '../index';
 import createInterface from 'utils/interface'
-import type {CommentT} from 'Store/types';
+import type {CommentT, ID} from 'Store/types';
 
 const Interface = createInterface('comments')
 class Comment {
@@ -15,7 +15,7 @@ class Comment {
       ...options
     }
 
-    const articleId :string = options.id;
+    const articleId :ID = options.id;
     article.update(articleId, 'comments', {created: Date(), ...comment});
 
     return Interface.create(comment, wrappedOptions).send()
