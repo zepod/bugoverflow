@@ -19,7 +19,15 @@ export type ArticleT = {
   created: string,
 }
 
+export type CollectionOf<T> = Array<T>;
+
+export type AnyCollectionOf = CollectionOf<any>;
+
 type FilterPatternT = (a: Object, i? :number) => boolean;
 type SelectorPatternT = Array<ID>;
-
 export type PatternT = FilterPatternT | SelectorPatternT;
+
+export type ResponseT<T> = {
+  payload: T,
+  context: Object
+}

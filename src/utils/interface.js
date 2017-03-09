@@ -1,4 +1,4 @@
-
+// @flow
 import config from 'config'
 import Store from 'Store'
 import {
@@ -45,6 +45,8 @@ export default function createInterface(domain :string) :Interface {
   }
 
   return {
+
+    // POST METHOD
     create: (body :Object, options? :Object, cb? :Function = () => {}) :InterfaceAPI => {
       const request = {
         ...options,
@@ -55,6 +57,7 @@ export default function createInterface(domain :string) :Interface {
       const send : () => Promise<void> = prepareSend(domain, request, cb)
       return { send }
     },
+    // PUT METHOD
     update: (id :ID, body :Object, options? :Object, cb? :Function = () => {}) :InterfaceAPI => {
       const request = {
         method: 'PUT',
@@ -63,6 +66,7 @@ export default function createInterface(domain :string) :Interface {
       const send : () => Promise<void> = prepareSend(domain, request, cb)
       return { send }
     },
+    // GET METHOD for a single entity based on ID
     get: (id :ID, options? :Object = {}, cb? :Function = () => {}, shouldCache :boolean) :InterfaceAPI => {
       const request = {
         ...options,
@@ -75,6 +79,7 @@ export default function createInterface(domain :string) :Interface {
       const send : () => Promise<void> = prepareSend(domain, request, getCachingCallback(cb, request, casheTrack))
       return { send }
     },
+    // GET METHOD for multiple entities
     getCollection: (options :Object = {}, cb? :Function = () => {}, shouldCache :boolean) :InterfaceAPI => {
       const request = {
         ...options,
@@ -88,6 +93,7 @@ export default function createInterface(domain :string) :Interface {
       const send : () => Promise<void> = prepareSend(domain, request, getCachingCallback(cb, request, casheTrack))
       return { send }
     },
+    // DELETE METHOD
     remove: (id :ID, options? :Object, cb? :Function = () => {}) :InterfaceAPI => {
       const request = {
         ...options,
@@ -120,7 +126,10 @@ function prepareSend(domain :string, request :Object, callback :Function) : () =
       fetch(url, options)
         .then(res => res.json())
         .then(data => {
-          callback(data);
+          const context = {
+            fullyLoaded: !fields
+          };
+          callback({payload:data, context});
           resolve()
         })
         .catch(err => {

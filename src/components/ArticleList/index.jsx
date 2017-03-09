@@ -22,6 +22,7 @@ class ArticleList extends Component {
               id={article._id}
               created={article.created}
               categories={article.categories}
+              lite={this.props.lite}
             />
           </Link>
         ))}

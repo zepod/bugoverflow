@@ -8,20 +8,18 @@ class LayoutPanel extends Component {
     articles: PropTypes.arrayOf(PropTypes.object).isRequired
   }
 
-  handleSearch = (searchPhrase : string) => {
-    this.store.article.searchArticles(searchPhrase, 'title', {
-      fields: ['title', 'overview', 'created', 'categories'],
-    });
-  }
-
   render() {
-    console.log('xxxx', this.props)
     return (
       <div>
-        <Search onSubmit={this.handleSearch}/>
-        <ArticleList
-          articles={this.props.articles}
-        />
+        <Search onSubmit={this.props.onSearch}/>
+        {this.props.noResult
+          ? <div>No Articles Found</div>
+          : (
+            <ArticleList
+              articles={this.props.articles}
+              lite
+            />
+        )}
       </div>
   )
   }

@@ -12,7 +12,8 @@ export default class ArticleInfo extends Component {
     overview: PropTypes.string.isRequired,
     categories: PropTypes.arrayOf(PropTypes.string).isRequired,
     created: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    lite: PropTypes.bool
   }
 
   render() {
@@ -20,14 +21,17 @@ export default class ArticleInfo extends Component {
       title,
       overview,
       categories,
-      created
+      created,
+      lite
     } = this.props;
 
-    return (  
+    return (
       <div>
         <Title title={title} />
         <DateMark date={new Date(created)} />
-        <Overview overview={overview} />
+        {!lite && (
+          <Overview overview={overview} />
+        )}
         <Categories categories={categories} />
       </div>
     );

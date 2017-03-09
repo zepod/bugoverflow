@@ -1,5 +1,5 @@
 // @flow
-import type {PatternT, ID} from 'Store/types';
+import type {PatternT, ID, ResponseT, AnyCollectionOf} from 'Store/types';
 
 type FakePromise = {
   then: Function
@@ -12,15 +12,15 @@ export default class StorePrototype {
     this.collection = collectionName;
   }
 
-  pushToCollection(target :string, value : Object, markAsLoaded: boolean) {
-    pushMore([value], (this: Object)[target], markAsLoaded)
+  pushToCollection(value : ResponseT<*>) {
+    pushMore([value.payload], (this: Object)[this.collection], value.context.fullyLoaded);
   }
 
-  pushMoreToCollection(target: ID, value :Array<Object>, markAsLoaded?: boolean = false) {
-    pushMore(value, (this: Object)[target], markAsLoaded)
+  pushMoreToCollection(value :ResponseT<AnyCollectionOf>) {
+    pushMore(value.payload, (this: Object)[this.collection], value.context.fullyLoaded);
   }
 
-  catchCache(id :ID, collection:string) :FakePromise {
+  catchCache(id :ID, collection: AnyCollectionOf) :FakePromise {
     if (
       (this: Object)[collection] &&
       (this: Object)[collection][id] &&
@@ -30,7 +30,7 @@ export default class StorePrototype {
     } else return false;
   }
 
-  getCollection(pattern? : PatternT) :Array<Object> {
+  getCollection(pattern? : PatternT) :AnyCollectionOf {
     const collectionName :string = this.collection;
     const self: Object = this;
     if (!pattern) return self[collectionName].values();
@@ -73,14 +73,14 @@ export default class StorePrototype {
   }
 }
 
-function pushMore(entities : Array<Object>, target: Object, markAsLoaded: boolean) {
+function pushMore(entities : Array<Object>, target: Object, fullyLoaded: boolean) {
   const [entity, ...rest] = entities;
   if (entities.length) {
-    pushMore(rest, target, markAsLoaded)
+    pushMore(rest, target, fullyLoaded)
   } else {
     return null;
   }
-  const newentity = {...entity, fullyLoaded: markAsLoaded}
+  const newentity = {...entity, fullyLoaded}
   if (!target.get(newentity._id) || !target.get(newentity._id).fullyLoaded) {
     target.set(newentity._id, newentity)
   }

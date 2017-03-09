@@ -1,7 +1,11 @@
 import React, {PropTypes} from 'react';
 import Component from 'Component';
 
-class Search extends Component {
+type State = {
+  searchPhrase: string
+}
+
+class Search extends Component<State> {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired
   }
@@ -20,6 +24,7 @@ class Search extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     this.props.onSubmit(this.state.searchPhrase);
+    this.setState({searchPhrase: ''})
   }
 
   render() {

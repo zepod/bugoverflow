@@ -6,12 +6,15 @@ import remotedev from 'mobx-remotedev';
 
 import createInterface from 'utils/interface'
 import StorePrototype from 'utils/store';
-import type {ArticleT, ID} from 'Store/types';
+import type {ArticleT, ID, ResponseT, CollectionOf} from 'Store/types';
+
+type ArticleCollectionOf = CollectionOf<ArticleT>
+
 
 const Interface = createInterface('articles')
 
 class Article extends StorePrototype {
-  @observable articles: Map<ID, Object> = new Map();
+  @observable articles: Map<ID, ArticleT> = new Map();
   @observable searchedArticles: Array<ID> = [];
 
 
@@ -24,9 +27,9 @@ class Article extends StorePrototype {
       ...options
     };
 
-    return Interface.getCollection(defaultOptions, (articles :Array<ArticleT>) => {
-      this.pushMoreToCollection('articles', articles, !options.fields);
-      this.searchedArticles = articles.map(a => a._id);
+    return Interface.getCollection(defaultOptions, (articles : ResponseT<ArticleCollectionOf>) => {
+      this.pushMoreToCollection(articles);
+      this.searchedArticles = articles.payload.map(a => a._id);
     }).send();
   }
 
@@ -38,9 +41,9 @@ class Article extends StorePrototype {
         ...options
       };
 
-      return Interface.getCollection(defaultOptions, (articles :Array<ArticleT>) => {
-        this.pushMoreToCollection('articles', articles, !options.fields);
-      }).send();
+      return Interface.getCollection(defaultOptions, (articles :ResponseT<ArticleCollectionOf>) =>
+        this.pushMoreToCollection(articles)
+      ).send();
   });
 
   @action loadArticle : (id: ID, ops : ?Object) => Promise<*>  =
@@ -51,8 +54,9 @@ class Article extends StorePrototype {
         ...options
       }
 
-      return Interface.get(articleId, defaultOptions, (article :ArticleT) =>
-        this.pushToCollection('articles', article, true)).send()
+      return Interface.get(articleId, defaultOptions, (article :ResponseT<ArticleT>) =>
+        this.pushToCollection(article)
+      ).send()
   });
 }
 

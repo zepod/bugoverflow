@@ -1,7 +1,14 @@
 import React, {PropTypes} from 'react';
 import Component from 'Component';
 
-export default class CommentSection extends Component {
+type State = {
+  fields: {
+    author: string,
+    body: string
+}
+};
+
+export default class CommentSection extends Component<State> {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired
   }

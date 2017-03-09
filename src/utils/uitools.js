@@ -1,21 +1,22 @@
-import React, {Component} from 'react';
+//@flow
+import React from 'react';
+import Component from 'Component';
 import Store from 'Store';
 import Preloader from 'components/Preloader';
 import { observer } from 'mobx-react';
 
-type preloadState = {
+type State = {
   isPreloading: boolean
 }
 
 export function preload(loadingFunc :Function) :Function {
   return (DecoratedComponent :Class<*>) => {
-    class PreloadHOC extends Component {
-      constructor(props :Object) {
-        super(props);
-        const state : preloadState = {
+    class PreloadHOC extends Component<State> {
+      constructor(props :Object, context: Object) {
+        super(props, context);
+        this.state = {
           isPreloading: true
         }
-        this.state = state;
         loadingFunc(Store, this.props.params).then(() => this.setState({isPreloading: false}));
       }
 
@@ -35,8 +36,7 @@ export function preload(loadingFunc :Function) :Function {
       }
 
       render() {
-        const state: preloadState = this.state;
-        if (state.isPreloading) {
+        if (this.state.isPreloading) {
           return (<Preloader />)
         } else {
           return (<DecoratedComponent {...this.props}/>)

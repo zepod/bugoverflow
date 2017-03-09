@@ -4,7 +4,7 @@ const ArticleCategories = ({categories}) => {
   return (
     <div>
       {categories.map((category: string, i :number) => (
-        <span key={`${category}-category-${i}`}>{category}</span>
+          <span key={`${category}-category-${i}`}>{category}</span>
       ))}
     </div>
   );
